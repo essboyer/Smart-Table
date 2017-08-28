@@ -31,6 +31,21 @@ ng.module('smart-table')
 
           var func;
           predicate = ng.isFunction(getter(scope)) || ng.isArray(getter(scope)) ? getter(scope) : attr.stSort;
+          
+          // Support array
+          if (ng.isString(predicate) && predicate.includes("[")) {
+            var parr = predicate.replace(/'/g, '"');
+
+            try {
+              parr = JSON.parse(parr);
+              if (ng.isArray(parr)) {
+                predicate = parr;
+              }
+            } catch (e) {
+                // not an array
+            }
+          }
+          
           if (index % 3 === 0 && !!skipNatural !== true) {
             //manual reset
             index = 0;
